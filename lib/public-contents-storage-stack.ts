@@ -22,7 +22,6 @@ export class PublicContentsStorageStack extends cdk.Stack {
         BUCKET_NAME: process.env.BUCKET_NAME || 'public-contents-bucket',
         ACCESS_KEY_ID: process.env.ACCESS_KEY_ID || '',
         SECRET_ACCESS_KEY: process.env.SECRET_ACCESS_KEY || '',
-        SESSION_TOKEN: process.env.SESSION_TOKEN || '',
         REGION: process.env.REGION || 'us-east-1',
       },
       functionName: `tpcs-Handler-${envName}`,

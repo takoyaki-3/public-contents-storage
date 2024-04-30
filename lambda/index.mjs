@@ -4,7 +4,6 @@ import { S3Client, PutObjectCommand, getSignedUrl } from "@aws-sdk/client-s3";
 const BUCKET_NAME = process.env.BUCKET_NAME;
 const AWS_ACCESS_KEY_ID = process.env.ACCESS_KEY_ID;
 const AWS_SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
-const AWS_SESSION_TOKEN = process.env.SESSION_TOKEN;
 const AWS_REGION = process.env.REGION;
 
 // Create an S3 client service object with credentials
@@ -13,7 +12,6 @@ const s3Client = new S3Client({
   credentials: {
     accessKeyId: AWS_ACCESS_KEY_ID,
     secretAccessKey: AWS_SECRET_ACCESS_KEY,
-    sessionToken: AWS_SESSION_TOKEN // Include this only if you are using temporary credentials
   }
 });
 
