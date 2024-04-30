@@ -31,8 +31,10 @@ export class PublicContentsStorageStack extends cdk.Stack {
     const api = new apiGateway.RestApi(this, 'PublicContentsApi', {
       restApiName: `tpcs-PublicContentsApi-${envName}`,
       defaultCorsPreflightOptions: {
-        allowOrigins: apiGateway.Cors.ALL_ORIGINS, // Configure CORS if required
-        allowMethods: apiGateway.Cors.ALL_METHODS
+        allowOrigins: apiGateway.Cors.ALL_ORIGINS,
+        allowMethods: apiGateway.Cors.ALL_METHODS,
+        allowHeaders: apiGateway.Cors.DEFAULT_HEADERS.concat(['Custom-Header']),
+        allowCredentials: true
       }
     });
 
@@ -40,7 +42,8 @@ export class PublicContentsStorageStack extends cdk.Stack {
     contentResource.addMethod('GET', new apiGateway.LambdaIntegration(handlerLambda, {
       proxy: true,
     }), {
-      authorizationType: apiGateway.AuthorizationType.NONE
+      authorizationType: apiGateway.AuthorizationType.NONE,
+      methodResponses: [{ statusCode: "200" }], // Define method responses
     });
   }
 }

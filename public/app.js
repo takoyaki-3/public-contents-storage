@@ -1,21 +1,43 @@
-async function uploadFile() {
-  const file = document.getElementById('fileInput').files[0];
-  const filename = encodeURIComponent(file.name);
-  const response = await fetch(`https://あなたのAPIエンドポイント?url=${filename}`);
-  const data = await response.json();
-  const url = data.uploadUrl;
+document.getElementById('dropZone').addEventListener('click', () => {
+    document.getElementById('fileInput').click();
+});
 
-  const result = await fetch(url, {
-      method: 'PUT',
-      body: file,
-      headers: {
-          'Content-Type': 'application/octet-stream'
-      }
-  });
+document.getElementById('fileInput').addEventListener('change', uploadFiles);
+document.getElementById('dropZone').addEventListener('drop', (event) => {
+    event.preventDefault();
+    uploadFiles(event.dataTransfer);
+});
+document.getElementById('dropZone').addEventListener('dragover', (event) => {
+    event.preventDefault();
+});
 
-  if (result.ok) {
-      alert('File uploaded successfully.');
-  } else {
-      alert('Upload failed.');
-  }
+async function uploadFiles(dataTransfer) {
+    const files = dataTransfer.files;
+    for (const file of files) {
+        const filename = encodeURIComponent(file.name);
+        const response = await fetch(`https://o0nc3e2ej2.execute-api.ap-northeast-1.amazonaws.com/prod/content?filename=${filename}`);
+        const data = await response.json();
+        const url = data.uploadUrl;
+
+        await fetch(url, {
+            method: 'PUT',
+            body: file,
+            headers: {
+                'Content-Type': 'application/octet-stream'
+            }
+        });
+
+        addToList(file.name);
+    }
+}
+
+function addToList(fileName) {
+    const node = document.createElement('div');
+    node.innerText = fileName;
+    node.className = 'file-name';
+    node.onclick = () => {
+        navigator.clipboard.writeText(fileName);
+        alert('Copied: ' + fileName);
+    };
+    document.getElementById('uploadedFiles').appendChild(node);
 }

@@ -3,10 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>File Upload to S3</title>
+    <style>
+        #dropZone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            color: #ccc;
+        }
+        .uploaded-files {
+            margin-top: 20px;
+        }
+        .file-name {
+            margin: 5px;
+            padding: 5px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Upload</button>
+    <div id="dropZone">Drop files here or click to upload</div>
+    <input type="file" id="fileInput" multiple style="display: none;">
+    <div class="uploaded-files" id="uploadedFiles"></div>
+
     <script src="app.js"></script>
 </body>
 </html>
