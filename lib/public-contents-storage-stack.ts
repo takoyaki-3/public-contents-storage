@@ -39,6 +39,8 @@ export class PublicContentsStorageStack extends cdk.Stack {
     const contentResource = api.root.addResource('content');
     contentResource.addMethod('GET', new apiGateway.LambdaIntegration(handlerLambda, {
       proxy: true,
-    }));
+    }), {
+      authorizationType: apiGateway.AuthorizationType.NONE
+    });
   }
 }
