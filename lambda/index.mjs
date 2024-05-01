@@ -30,11 +30,15 @@ export const handler = async (event) => {
     };
   }
 
-  // 日付データを取得し、フォーマットする
-  const date = new Date();
-  const year = date.getFullYear(); // 年を取得
-  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 月を取得し、2桁にする
-  const day = date.getDate().toString().padStart(2, '0'); // 日を取得し、2桁にする
+  // UTCの現在時刻を取得し、日本時間に変換する（UTC+9）
+  const now = new Date();
+  const japanTimeOffset = now.getTime() + (now.getTimezoneOffset() * 60000) + (9 * 3600000);
+  const japanDate = new Date(japanTimeOffset);
+
+  // 年月日をフォーマット
+  const year = japanDate.getFullYear(); // 年を取得
+  const month = (japanDate.getMonth() + 1).toString().padStart(2, '0'); // 月を取得し、2桁にする
+  const day = japanDate.getDate().toString().padStart(2, '0'); // 日を取得し、2桁にする
 
   // ファイル名をクエリパラメータから取得
   const filename = event.queryStringParameters.filename;
