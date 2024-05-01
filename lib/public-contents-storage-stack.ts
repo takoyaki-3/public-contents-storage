@@ -52,12 +52,30 @@ export class PublicContentsStorageStack extends cdk.Stack {
     });
 
     const contentResource = api.root.addResource('content');
-    // Add POST method for uploads
-    contentResource.addMethod('POST', new apiGateway.LambdaIntegration(handlerLambda, {
+    const integrationOptions: apiGateway.LambdaIntegrationOptions = {
       proxy: true,
-    }), {
+      integrationResponses: [
+        {
+          statusCode: '200',
+          responseParameters: {
+            'method.response.header.Access-Control-Allow-Origin': "'*'",
+            'method.response.header.Access-Control-Allow-Credentials': "'true'"
+          }
+        }
+      ]
+    };
+
+    contentResource.addMethod('POST', new apiGateway.LambdaIntegration(handlerLambda, integrationOptions), {
       authorizationType: apiGateway.AuthorizationType.NONE,
-      methodResponses: [{ statusCode: "200" }],
+      methodResponses: [
+        {
+          statusCode: '200',
+          responseParameters: {
+            'method.response.header.Access-Control-Allow-Origin': true,
+            'method.response.header.Access-Control-Allow-Credentials': true
+          }
+        }
+      ]
     });
   }
 }
