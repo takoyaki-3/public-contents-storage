@@ -3,18 +3,17 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import jwt from 'jsonwebtoken';
 import axios from "axios";
 
-// 環境変数からS3バケットとAWS認証情報を読み込む
+// Load the S3 bucket and user name from environment variables
 const BUCKET_NAME = process.env.BUCKET_NAME;
 const REGION = process.env.REGION;
-
 const UserName = process.env.USER_NAME;
 
-// 認証情報を使用してS3クライアントサービスオブジェクトを作成
+// Create an S3 client service object with authentication information
 const s3Client = new S3Client({
   region: REGION,
 });
 
-// Lambda関数のエクスポート
+// Lambda handler function
 export const handler = async (event) => {
   console.log(JSON.stringify(event, null, 2));
 
@@ -30,31 +29,31 @@ export const handler = async (event) => {
     };
   }
 
-  // UTCの現在時刻を取得し、日本時間に変換する（UTC+9）
+  // Get the current time in UTC and convert it to Japan time (UTC+9)
   const now = new Date();
   const japanTimeOffset = now.getTime() + (now.getTimezoneOffset() * 60000) + (9 * 3600000);
   const japanDate = new Date(japanTimeOffset);
 
-  // 年月日をフォーマット
+  // Year, month, and day of the Japan time
   const year = japanDate.getFullYear(); // 年を取得
   const month = (japanDate.getMonth() + 1).toString().padStart(2, '0'); // 月を取得し、2桁にする
   const day = japanDate.getDate().toString().padStart(2, '0'); // 日を取得し、2桁にする
 
-  // ファイル名をクエリパラメータから取得
+  // Get the filename from the query string
   const filename = event.queryStringParameters.filename;
 
-  // S3へのPUT用パラメータを設定
+  // Set the parameters for the PutObjectCommand
   const params = {
     Bucket: BUCKET_NAME,
     Key: `${year}/${month}${day}/${filename}`, // ファイルパスを指定
     ContentType: 'application/octet-stream', // コンテンツタイプを指定
   };
 
-  // PutObjectCommandオブジェクトの作成
+  // Create a PutObjectCommand object
   const command = new PutObjectCommand(params);
 
   try {
-    // 署名付きURLの生成、有効期限を300秒（5分）に設定
+    // Create a signed URL for the PutObjectCommand
     const url = await getSignedUrl(s3Client, command, { expiresIn: 300 });
     return {
       statusCode: 200,
