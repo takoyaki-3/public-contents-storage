@@ -58,5 +58,8 @@ export class PublicContentsStorageStack extends cdk.Stack {
       authorizationType: apiGateway.AuthorizationType.NONE,
       methodResponses: [{ statusCode: "200" }], // Define method responses
     });
+
+    // Grant read/write access to the Lambda function
+    bucket.grantReadWrite(handlerLambda);
   }
 }
