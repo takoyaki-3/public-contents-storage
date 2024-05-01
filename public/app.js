@@ -18,6 +18,7 @@ async function uploadFiles(dataTransfer) {
         const response = await fetch(`https://o0nc3e2ej2.execute-api.ap-northeast-1.amazonaws.com/prod/content?filename=${filename}`);
         const data = await response.json();
         const url = data.uploadUrl;
+        console.log('Uploading:', file.name, 'to', url);
 
         await fetch(url, {
             method: 'PUT',
