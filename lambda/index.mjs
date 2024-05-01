@@ -22,7 +22,6 @@ export const handler = async (event) => {
     Bucket: BUCKET_NAME,
     Key: event.queryStringParameters.filename,
     ContentType: 'application/octet-stream', // コンテンツタイプを指定
-    ACL: 'public-read', // アクセス制御リストを設定
   };
 
   // PutObjectCommandオブジェクトの作成

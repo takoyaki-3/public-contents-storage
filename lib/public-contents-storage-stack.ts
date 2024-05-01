@@ -18,7 +18,6 @@ export class PublicContentsStorageStack extends cdk.Stack {
       bucketName: `takoyaki3-public-contents-bucket-${envName}`,
       publicReadAccess: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
       cors: [
         {
           allowedOrigins: ['*'],
