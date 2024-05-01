@@ -15,7 +15,12 @@ async function uploadFiles(dataTransfer) {
     const files = dataTransfer.files;
     for (const file of files) {
         const filename = encodeURIComponent(file.name);
-        const response = await fetch(`https://o0nc3e2ej2.execute-api.ap-northeast-1.amazonaws.com/prod/content?filename=${filename}`);
+        console.log('token:', authIdToken);
+        const response = await fetch(`https://o0nc3e2ej2.execute-api.ap-northeast-1.amazonaws.com/prod/content?filename=${filename}`, {
+            headers: {
+              'Authorization': `Bearer ${authIdToken}`
+            }
+        });
         const data = await response.json();
         const url = data.uploadUrl;
         console.log('Uploading:', file.name, 'to', url);

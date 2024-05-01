@@ -36,6 +36,7 @@ export class PublicContentsStorageStack extends cdk.Stack {
       environment: {
         BUCKET_NAME: bucket.bucketName,
         REGION: 'ap-northeast-1',
+        USER_NAME: process.env.USER_NAME || 'unknown',
       },
       functionName: `tpcs-Handler-${envName}`,
     });

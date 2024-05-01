@@ -7,7 +7,7 @@ import axios from "axios";
 const BUCKET_NAME = process.env.BUCKET_NAME;
 const REGION = process.env.REGION;
 
-const UserName = process.env.UserName;
+const UserName = process.env.USER_NAME;
 
 // 認証情報を使用してS3クライアントサービスオブジェクトを作成
 const s3Client = new S3Client({
@@ -19,6 +19,7 @@ export const handler = async (event) => {
   console.log(JSON.stringify(event, null, 2));
 
   const user = await authorize(event);
+
   if (user?.user !== UserName) {
     return {
       statusCode: 401,
@@ -66,7 +67,7 @@ let lastUpdatedTime = null;
 
 // Authorize the request
 export const authorize = async (event) => {
-  const tokenStr = event?.headers?.authorization;
+  const tokenStr = event?.headers?.Authorization;
 
   // authorized by JWT token
   if (tokenStr?.startsWith('Bearer ')) {
@@ -97,12 +98,10 @@ export const authorize = async (event) => {
       // Verify the token
       const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
 
-      const role = await checkUserRole(decoded.email);
       return {
         status: 'ok',
         isAuthorized: true,
         user: decoded.email,
-        role: role ?? 'authenticatedUser',
         message: 'Authorized by JWT',
       };
     } catch (error) {
@@ -112,7 +111,6 @@ export const authorize = async (event) => {
         status: 'failed',
         isAuthorized: false,
         user: 'anonymous',
-        role: 'anonymous',
         message: `Unauthorized: ${error.message}`,
       }
     }
@@ -123,7 +121,6 @@ export const authorize = async (event) => {
     status: 'ok',
     isAuthorized: false,
     user: 'anonymous',
-    role: 'anonymous',
     message: 'Unauthorized',
   }
 }
