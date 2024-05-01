@@ -30,9 +30,19 @@ export const handler = async (event) => {
     };
   }
 
+  // 日付データを取得し、フォーマットする
+  const date = new Date();
+  const year = date.getFullYear(); // 年を取得
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 月を取得し、2桁にする
+  const day = date.getDate().toString().padStart(2, '0'); // 日を取得し、2桁にする
+
+  // ファイル名をクエリパラメータから取得
+  const filename = event.queryStringParameters.filename;
+
+  // S3へのPUT用パラメータを設定
   const params = {
     Bucket: BUCKET_NAME,
-    Key: event.queryStringParameters.filename,
+    Key: `${year}/${month}${day}/${filename}`, // ファイルパスを指定
     ContentType: 'application/octet-stream', // コンテンツタイプを指定
   };
 
