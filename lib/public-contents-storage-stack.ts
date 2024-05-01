@@ -46,36 +46,17 @@ export class PublicContentsStorageStack extends cdk.Stack {
       defaultCorsPreflightOptions: {
         allowOrigins: apiGateway.Cors.ALL_ORIGINS,
         allowMethods: apiGateway.Cors.ALL_METHODS,
-        allowHeaders: apiGateway.Cors.DEFAULT_HEADERS.concat(['Content-Type']),
+        allowHeaders: apiGateway.Cors.DEFAULT_HEADERS.concat(['Custom-Header']),
         allowCredentials: true
       }
     });
 
     const contentResource = api.root.addResource('content');
-    const integrationOptions: apiGateway.LambdaIntegrationOptions = {
+    contentResource.addMethod('GET', new apiGateway.LambdaIntegration(handlerLambda, {
       proxy: true,
-      integrationResponses: [
-        {
-          statusCode: '200',
-          responseParameters: {
-            'method.response.header.Access-Control-Allow-Origin': "'*'",
-            'method.response.header.Access-Control-Allow-Credentials': "'true'"
-          }
-        }
-      ]
-    };
-
-    contentResource.addMethod('POST', new apiGateway.LambdaIntegration(handlerLambda, integrationOptions), {
+    }), {
       authorizationType: apiGateway.AuthorizationType.NONE,
-      methodResponses: [
-        {
-          statusCode: '200',
-          responseParameters: {
-            'method.response.header.Access-Control-Allow-Origin': true,
-            'method.response.header.Access-Control-Allow-Credentials': true
-          }
-        }
-      ]
+      methodResponses: [{ statusCode: "200" }], // Define method responses
     });
   }
 }
