@@ -16,7 +16,7 @@ export class PublicContentsStorageStack extends cdk.Stack {
     // Create S3 bucket
     const bucket = new s3.Bucket(this, 'PublicContentsBucket', {
       bucketName: `takoyaki3-public-contents-bucket-${envName}`,
-      publicReadAccess: false,
+      publicReadAccess: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
       cors: [
@@ -35,7 +35,8 @@ export class PublicContentsStorageStack extends cdk.Stack {
       code: lambda.Code.fromAsset('lambda'),
       handler: 'index.handler',
       environment: {
-        BUCKET_NAME: bucket.bucketName
+        BUCKET_NAME: bucket.bucketName,
+        REGION: 'ap-northeast-1',
       },
       functionName: `tpcs-Handler-${envName}`,
     });
