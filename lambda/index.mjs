@@ -8,10 +8,6 @@ const REGION = process.env.REGION;
 // 認証情報を使用してS3クライアントサービスオブジェクトを作成
 const s3Client = new S3Client({
   region: REGION,
-  credentials: {
-    accessKeyId: AWS_ACCESS_KEY_ID,
-    secretAccessKey: AWS_SECRET_ACCESS_KEY,
-  }
 });
 
 // Lambda関数のエクスポート

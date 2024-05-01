@@ -34,10 +34,8 @@ export class PublicContentsStorageStack extends cdk.Stack {
       code: lambda.Code.fromAsset('lambda'),
       handler: 'index.handler',
       environment: {
-        BUCKET_NAME: process.env.BUCKET_NAME || 'public-contents-bucket',
-        ACCESS_KEY_ID: process.env.ACCESS_KEY_ID || '',
-        SECRET_ACCESS_KEY: process.env.SECRET_ACCESS_KEY || '',
-        REGION: process.env.REGION || 'us-east-1',
+        BUCKET_NAME: bucket.bucketName,
+        REGION: 'ap-northeast-1',
       },
       functionName: `tpcs-Handler-${envName}`,
     });
