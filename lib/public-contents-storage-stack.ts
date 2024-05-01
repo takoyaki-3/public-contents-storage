@@ -17,8 +17,16 @@ export class PublicContentsStorageStack extends cdk.Stack {
     const bucket = new s3.Bucket(this, 'PublicContentsBucket', {
       bucketName: `takoyaki3-public-contents-bucket-${envName}`,
       publicReadAccess: false,
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // adjust policy according to your need
-      autoDeleteObjects: true // Useful during development, remove for production
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+      cors: [
+        {
+          allowedOrigins: ['*'],
+          allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.PUT, s3.HttpMethods.POST, s3.HttpMethods.DELETE],
+          allowedHeaders: ['*'],
+          maxAge: 3000
+        }
+      ]
     });
 
     // Create Lambda function
