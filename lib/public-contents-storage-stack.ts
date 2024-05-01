@@ -61,5 +61,6 @@ export class PublicContentsStorageStack extends cdk.Stack {
 
     // Grant read/write access to the Lambda function
     bucket.grantReadWrite(handlerLambda);
+    bucket.grantPut(handlerLambda);
   }
 }
